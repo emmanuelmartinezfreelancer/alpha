@@ -1,7 +1,64 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Navbar from '../src/components/Navbar'
+import TotalCourses from './total-courses'
 import Footer from '../src/components/Footer'
+import dynamic from 'next/dynamic'
+
+const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
+  ssr: false,
+})
+
+const P5Draw = (props) => {
+
+let x = 0;
+let y = 150;
+
+const setup = (p5, canvasParentRef) => {
+  // use parent to render the canvas in this ref
+  // (without that p5 will render the canvas outside of your component)
+  p5.createCanvas(1920, 1080).parent(canvasParentRef);
+};
+
+const draw = (p5) => {
+  /* p5.background(0); */
+
+  /* rgba(239, 125, 0, 1) */
+  p5.background("#FFFFFF");
+  p5.stroke(239, 125, 0);
+  p5.strokeWeight(2);
+  p5.ellipse(x, y, 100, 100);
+
+  p5.rotate(0.3);
+  p5.scale(1.2);
+  p5.translate(150, -70)
+  p5.triangle(30, 75, 58, 20, 86, 75);
+
+  p5.scale(0.8);
+  p5.translate(1450, -300)
+  p5.ellipse(0, 150, 100, 100);
+
+  p5.rotate(-0.6);
+  p5.scale(1.5);
+  p5.translate(-180, -100)
+  p5.rect(30, 20, 55, 55);
+
+  // NOTE: Do not use setState in the draw function or in functions that are executed
+  // in the draw function...
+  // please use normal variables or class properties for these purposes
+  x++;
+
+  if (x == 1920){
+    x = 0;
+  }
+
+  /* console.log("X", x) */
+
+};
+
+return <Sketch setup={setup} draw={draw} />;
+
+};
 
 export default function Home() {
   return (
@@ -14,63 +71,44 @@ export default function Home() {
       </Head>
 
       <Navbar/>
-      <main className="w-full h-fit">
+      <main className="flex flex-col w-full h-fit">
 
         {/* First slide */}  
 
-        <div className="flex flex-col bg-[#F2F2F2] w-full h-[705px] py-[316px] gap-y-12">
-        <h1 className="text-5xl uppercase text-center">La calidad de la ESAT sin importar <br />donde te encuentres</h1>
-        <p className="text-3xl text-center text-[20px]">Nuestros profesores son expertos en su campo y <br />te brindarán la mejor formación en tiempo real, <br />con todas las ventajas de un curso presencial</p>
+        <div className="flex flex-col bg-transparent w-full h-[705px] pt-[280px] pb-[316px] gap-y-9">
+        <h1 className="text-7xl uppercase text-center font-bold leading-tight">La calidad de ESAT<br /> sin importar donde<br /> te encuentres</h1>
+        <p className="text-3xl text-center font-light">Nuestros profesores son expertos en su campo y te brindarán la<br /> mejor formación en tiempo real, con todas las ventajas de un <br />curso presencial</p>
         <button 
-            className="mx-auto w-36 mb-2 px-6 border bg-black py-3 text-white hover:text-black hover:bg-white text-base rounded-lg shadow hover:shadow-lg outline-none focus:outline-none"
+            className="mx-auto w-2/12 mb-2 px-6 border bg-[#EF7D00] py-3 text-white hover:text-black hover:bg-white text-lg rounded-xl shadow hover:shadow-lg outline-none focus:outline-none"
             type="button">
-            Sign Up
+            Ver cursos
         </button>
+        <div className="flex w-full absolute z-[-1] place-content-center">
+        
+        <P5Draw/>
+
+        </div>
+        
         </div>
 
-        {/* Second slide */}
+        {/* Total courses slide */}
 
-        <div className="flex flex-col flex-wrap bg-[#F2F2F2] w-full h-[905px] pt-[240px] gap-y-12">
-        <p className="text-xl text-center">Cursos destacados</p>
-
-        <div className="flex flex-row mx-auto gap-12">
-            <div className="flex flex-col gap-y-2">
-            <div className="bg-black w-[300px] h-[300px]"></div>
-            <p className="text-lg font-bold">Main Title</p>
-            <p className="text-base ">Lorem ipsum dolor sit amet, consectetur<br /> adipiscing elit</p>
-            <p className="text-sm ">Learn more</p> 
-            </div>
-
-            <div className="flex flex-col gap-y-2">
-            <div className="bg-black w-[300px] h-[300px]"></div>
-            <p className="text-lg font-bold">Main Title</p>
-            <p className="text-base ">Lorem ipsum dolor sit amet, consectetur<br /> adipiscing elit</p>
-            <p className="text-sm ">Learn more</p> 
-            </div>
-
-            <div className="flex flex-col gap-y-2">
-            <div className="bg-black w-[300px] h-[300px]"></div>
-            <p className="text-lg font-bold">Main Title</p>
-            <p className="text-base ">Lorem ipsum dolor sit amet, consectetur<br /> adipiscing elit</p>
-            <p className="text-sm ">Learn more</p> 
-            </div>
-        </div>
-        </div>
+        <TotalCourses/>
 
         {/* Third slide */}
 
-        <div className="flex flex-row w-full h-[905px] px-36 pr-56">
-            <div className="flex flex-col pr-48 pl-14 my-auto">
+        <div className="flex flex-row w-full h-[905px] bg-[#F2F2F2] px-36 pr-56">
+           
+            <div className="flex flex-col pr-40 pl-14 my-auto">
 
-                <h1 className="text-4xl">Cursos online en directo</h1>
-                <p className="text-2xl pt-8">En nuestra plataforma, ofrecemos cursos online en directo que te permiten aprender de la mejor manera sin importar dónde te encuentres.</p>
+                <h1 className="text-5xl font-semibold border-[#BABABA] border-b-[3.5px] pb-6">Cursos online en directo</h1>
+                <p className="text-2xl pt-5">En nuestra plataforma, ofrecemos cursos online en directo que te permiten aprender de la mejor manera sin importar dónde te encuentres.</p>
                 <p className="text-lg font-light pt-12">¡No te pierdas la oportunidad de aprender de la mejor manera, sin importar dónde te encuentres, con nuestros cursos online en directo de alta calidad!</p>
 
             </div>
-            <div className="flex flex-col ml">
+            <div className="flex flex-col ">
                 
-                <div className="relative bg-gray-200 left-24 w-[600px] h-[348px] top-48"></div>
-                <div className=" relative  bg-black w-[600px] h-[348px] pb-6 bottom-9"></div>
+                <div className="bg-white w-[800px] h-[600px] my-auto transition duration-300 ease-in-out hover:shadow-2xl"></div>
                               
             </div>
 
@@ -78,7 +116,7 @@ export default function Home() {
 
         {/* Fourth slide */}
 
-        <div className="flex flex-row w-full h-[905px] px-36 gap-y-16 bg-[#F2F2F2]">
+{/*         <div className="flex flex-row w-full h-[905px] px-36 gap-y-16 bg-white">
 
             <div className="flex flex-col ml-14">
 
@@ -95,23 +133,130 @@ export default function Home() {
 
             </div>
 
+        </div> */}
+
+        {/* Testimonios */}  
+
+        <div className="flex flex-col bg-white w-full h-[1000px] py-auto py-48 px-28 gap-y-12">
+        
+        <p className="text-4xl text-center font-light">Hemos ayudado a cientos de alumnas/os a <span className="font-semibold">encontrar un futuro profesional<br /> mejor</span> a través del diseño y desarrollo Web front-end</p>
+        
+        <div className="flex flex-row gap-14 w-full place-content-evenly pt-20 pl-24 pr-24">
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf1.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+              <p className="font-bold">Diego Pertusa</p>
+              <p className="font-light">Frontend Developer</p>
+              <p>We Are Marketing(WAM)</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf2.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+              <p className="font-bold">Ruben López</p>
+              <p className="font-light">Graphic & Interaction Designer</p>
+              <p>Sakudarte</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf3.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+              <p className="font-bold">Kike Domingo</p>
+              <p className="font-light">Product Manager & UX/UI Designer</p>
+              <p>Vitcord</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+        <div className="flex flex-row gap-14 w-full place-content-evenly pl-24 pr-24">
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf1.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+              <p className="font-bold">Diego Pertusa</p>
+              <p className="font-light">Frontend Developer</p>
+              <p>We Are Marketing(WAM)</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf2.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+            <p className="font-bold">Ruben López</p>
+              <p className="font-light">Graphic & Interaction Designer</p>
+              <p>Sakudarte</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-row py-4">
+            <div className="bg-black w-5/6 h-full my-auto rounded-2xl bg-cover bg-center"
+               style={{ 
+                 backgroundImage: `url("./img/pf3.png")`,
+               }} 
+            ></div>
+            <div className="flex flex-col px-5 py-2">
+            <p className="font-bold">Kike Domingo</p>
+              <p className="font-light">Product Manager & UX/UI Designer</p>
+              <p>Vitcord</p>
+              <p className="pt-5 italic text-lg font-light">“El postgrado me abrió la puerta al mercado laboral y me dió la oportunidad de trabajar en lo que me apasiona”.</p>
+            </div>
+          </div>
+
+        </div>
+
+
         </div>
 
         {/* Fifth slide */}  
 
-        <div className="flex flex-col bg-white w-full h-[705px] py-auto pt-48 gap-y-12">
-        <h1 className="text-3xl font-bold text-center">¿Empezamos?</h1>
-        <p className="text-2xl text-center">Transforma tu futuro con la educación de calidad de ESAT. <br />¡Inscríbete hoy y comienza a construir el camino hacia el éxito!</p>
+        <div className="flex flex-col bg-white w-full h-[600px] gap-y-12 border-y-4 border-[#BABABA] ">
+
+         <div className="flex flex-col content-center gap-y-12 my-auto"> 
+        <p className="text-5xl text-center font-light">Aprende las <span className="font-semibold">competencias y habilidades<br /> digitales con mayor valor</span> en el mercado</p>
+       
         <button 
-            className="mx-auto w-36 mb-2 px-6 border bg-black py-3 text-white hover:text-black hover:bg-white text-base rounded-lg shadow hover:shadow-lg outline-none focus:outline-none"
+            className="mx-auto w-2/12 mb-2 px-6 border bg-[#EF7D00] py-5 text-white hover:text-black hover:bg-white text-lg rounded-xl shadow hover:shadow-lg outline-none focus:outline-none"
             type="button">
-            Inscribirse
+            Reserva tu plaza ahora
         </button>
+        </div> 
         </div>
 
         {/* Sixth slide */}
 
-        <div className="flex flex-row w-full h-[905px] bg-[#F2F2F2] px-36 pr-56">
+{/*         <div className="flex flex-row w-full h-[905px] bg-[#F2F2F2] px-36 pr-56">
 
             <div className="flex flex-col pr-48 pl-14 my-auto w-1/2">
 
@@ -136,27 +281,12 @@ export default function Home() {
                               
 
 
-        </div>
-
-
-        {/* Seventh slide */}  
-
-        <div className="flex flex-col bg-white w-full h-[705px] py-auto pt-48 gap-y-12">
-        <h1 className="text-3xl text-center">Testimonios</h1>
-        <p className="text-2xl text-center">Experiencias reales de estudiantes satisfechos con nuestra escuela</p>
-        <div className="flex flex-row gap-14 w-full place-content-evenly pt-20 pl-24 pr-24">
-            <div className="bg-black w-1/6 h-24"></div>
-            <div className="bg-black w-1/6 h-24"></div>
-            <div className="bg-black w-1/6 h-24"></div>
-            <div className="bg-black w-1/6 h-24"></div>
-            <div className="bg-black w-1/6 h-24"></div>
-        </div>
-        </div>
+        </div> */}
 
 
         {/* Eigth slide */}
 
-        <div className="flex flex-row w-full h-[1300px] px-36 bg-[#F2F2F2]">
+{/*         <div className="flex flex-row w-full h-[1300px] px-36 bg-[#F2F2F2]">
 
             <div className="flex flex-col w-4/6 mx-auto my-auto text-center gap-y-9 ">
 
@@ -200,7 +330,7 @@ export default function Home() {
                               
             </div>
 
-        </div>
+        </div> */}
         
         <Footer />
 
